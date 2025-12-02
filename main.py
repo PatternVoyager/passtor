@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+from datetime import datetime as dt
 import random as rd
 import string as st
 import sys
+import os
 
 def passlen():
   if len(sys.argv)>1:
@@ -17,30 +19,67 @@ def passlen():
       return None
   return None
 
-lp = passlen()
-if lp is None:
-  while True:
+def save_password(result):
+  time = dt.now().strftime('%Y-%m-%d %H:%M:%S')
+  in_save = input('Do you want to save the password? (y/n): ').strip().lower()
+
+  csv = {
+    'time': time,
+    'password': result,
+    'length': len(result)
+  }
+
+  if in_save == 'y':
+    file_exists = False
     try:
-      lp = int(input('enter your password length (8-16): '))
-      if 8<=lp<=16:
-        break
-      else:
-        print('please enter a number between 8-16')
-    except ValueError:
-      print('please enter a valid number')
-      sys.exit()
+      with open('passwords.csv', 'r') as f:
+        file_exists = True
+    except:
+      file_exists = False
 
-data = [
-  list(st.ascii_uppercase),
-  list(st.ascii_lowercase),
-  list(st.digits),
-  list(st.punctuation)
-]
+    columns = ['time', 'password', 'length']
+    file_exists = os.path.isfile('passwords.csv')
+    with open('passwords.csv', 'a') as f:
+      if not file_exists:
+        
+        f.write(columns[0] + ' , ' + columns[1] + ' , ' + columns[2] + '\n')
+      f.write(f"{csv['time']} , {csv['password']} , {csv['length']}\n")
+    print('Password saved to passwords.csv')
+  elif in_save == 'n':
+    pass
+  else:
+      print('Invalid input, Password not saved.')
 
-md = sum(data,[])
-box = []
-for i in range(lp):
-  box.append(rd.choice(md))
-  
-result = ''.join(box)
-print(f'Your Password: {result}')
+def main():
+  lp = passlen()
+  if lp is None:
+    while True:
+      try:
+        lp = int(input('enter your password length (8-16): '))
+        if 8<=lp<=16:
+          break
+        else:
+          print('please enter a number between 8-16')
+      except ValueError:
+        print('please enter a valid number')
+        sys.exit()
+
+  data = [
+    list(st.ascii_uppercase),
+    list(st.ascii_lowercase),
+    list(st.digits),
+    list(st.punctuation)
+  ]
+
+  md = sum(data,[])
+  box = []
+  for i in range(lp):
+    box.append(rd.choice(md))
+    
+  result = ''.join(box)
+  print(f'Your Password: {result}')
+  save_password(result)
+
+if __name__ == '__main__':
+  main()
+
