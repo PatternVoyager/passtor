@@ -65,8 +65,8 @@ def save_password(result):  # save password to csv file with date and time
     with open('passwords.csv', 'a') as f:
       if not file_exists:
         
-        f.write(columns[0] + ' , ' + columns[1] + ' , ' + columns[2] + ' , ' + columns[3] + '\n')
-      f.write(f"{csv['date']} , {csv['time']} , {csv['password']} , {csv['length']}\n")
+        f.write(columns[0] + ',' + columns[1] + ',' + columns[2] + ',' + columns[3] + '\n')
+      f.write(f"{csv['date']},{csv['time']},{csv['password']},{csv['length']}\n")
     print('Password saved to passwords.csv')
   elif in_save == 'n':
     pass
@@ -91,7 +91,7 @@ def main(): # main function to generate password
     list(st.ascii_uppercase),
     list(st.ascii_lowercase),
     list(st.digits),
-    list(st.punctuation)
+    list(st.punctuation.replace(',',''))  # exclude comma to avoid csv issues
   ]
 
   md = sum(data,[])
