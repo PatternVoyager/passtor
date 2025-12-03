@@ -5,7 +5,7 @@ import string as st
 import sys
 import os
 
-def passlen():
+def passlen():  # get password length from command line argument
   if len(sys.argv)>1:
     try:
       lp = int(sys.argv[1])
@@ -19,10 +19,31 @@ def passlen():
       return None
   return None
 
-def save_password(result):
+def save_pass_arg(result):  # save password from command line argument
+  if len(sys.argv)>2:
+    try:
+      save = sys.argv[2].strip().lower()
+      if save == 'y':
+        in_save = 'y'
+        return save
+      elif save == 'n':
+        in_save = 'n'
+        return save
+      else:
+        print('Invalid input for saving password.')
+        return None
+    except:
+      pass
+
+def save_password(result):  # save password to csv file with date and time
+  sv = save_pass_arg(result)
+  if sv is not None:
+    in_save = sv
+  else:
+    in_save = input('Do you want to save the password? (y/n): ').strip().lower()
+  
   date = dt.now().strftime('%Y-%m-%d')
   time = dt.now().strftime('%H:%M:%S')
-  in_save = input('Do you want to save the password? (y/n): ').strip().lower()
 
   csv = {
     'date': date,
@@ -52,7 +73,7 @@ def save_password(result):
   else:
       print('Invalid input, Password not saved.')
 
-def main():
+def main(): # main function to generate password
   lp = passlen()
   if lp is None:
     while True:
