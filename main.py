@@ -46,7 +46,7 @@ def save_password(result):  # save password to csv file with date and time
   time = dt.now().strftime('%H:%M:%S')
 
   csv = {
-    'date': date,
+    'created_at': date,
     'time': time,
     'password': result,
     'length': len(result)
@@ -60,13 +60,13 @@ def save_password(result):  # save password to csv file with date and time
     except:
       file_exists = False
 
-    columns = ['date', 'time', 'password', 'length']
+    columns = ['created_at', 'time', 'password', 'length']
     file_exists = os.path.isfile('passwords.csv')
     with open('passwords.csv', 'a') as f:
       if not file_exists:
         
         f.write(columns[0] + ',' + columns[1] + ',' + columns[2] + ',' + columns[3] + '\n')
-      f.write(f"{csv['date']},{csv['time']},{csv['password']},{csv['length']}\n")
+      f.write(f"{csv['created_at']},{csv['time']},{csv['password']},{csv['length']}\n")
     print('Password saved to passwords.csv')
   elif in_save == 'n':
     pass
