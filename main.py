@@ -5,6 +5,14 @@ import string as st
 import sys
 import os
 
+# Dapatkan path home user dan buat path ke folder passtor
+HOME_DIR = os.path.expanduser('~')
+PASSTOR_DIR = os.path.join(HOME_DIR, 'passtor')
+PASSWORDS_FILE = os.path.join(PASSTOR_DIR, 'passwords.csv')
+
+# Pastikan folder passtor ada
+os.makedirs(PASSTOR_DIR, exist_ok=True)
+
 def passlen():  # get password length from command line argument
   if len(sys.argv)>1:
     try:
@@ -55,19 +63,18 @@ def save_password(result):  # save password to csv file with date and time
   if in_save == 'y':
     file_exists = False
     try:
-      with open('passwords.csv', 'r') as f:
+      with open(PASSWORDS_FILE, 'r') as f:
         file_exists = True
     except:
       file_exists = False
 
     columns = ['created_at', 'time', 'password', 'length']
-    file_exists = os.path.isfile('passwords.csv')
-    with open('passwords.csv', 'a') as f:
+    file_exists = os.path.isfile(PASSWORDS_FILE)
+    with open(PASSWORDS_FILE, 'a') as f:
       if not file_exists:
-        
         f.write(columns[0] + ',' + columns[1] + ',' + columns[2] + ',' + columns[3] + '\n')
       f.write(f"{csv['created_at']},{csv['time']},{csv['password']},{csv['length']}\n")
-    print('Password saved to passwords.csv')
+    print(f'Password saved to {PASSWORDS_FILE}')
   elif in_save == 'n':
     pass
   else:
@@ -105,4 +112,3 @@ def main(): # main function to generate password
 
 if __name__ == '__main__':
   main()
-
